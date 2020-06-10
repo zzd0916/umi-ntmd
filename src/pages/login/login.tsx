@@ -4,8 +4,8 @@ import { Form, Input, Button, Radio, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { history } from 'umi'
 import { Store } from 'antd/es/form/interface';
-import http from '../../utils/http'
-import auth from '../../utils/auth'
+import http from '@/utils/http'
+import auth from '@/utils/auth'
 
 import './login.less'
 

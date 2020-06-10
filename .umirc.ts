@@ -3,6 +3,10 @@ import { defineConfig, Redirect } from 'umi';
 export default defineConfig({
   // locale: {antd: true },
   // layout: { antd: true },
+  dva: {
+    // immer: true,
+    hmr: false,
+  },
   nodeModulesTransform: {
     type: 'none',
   },
@@ -46,6 +50,6 @@ export default defineConfig({
     },
   },
   alias: {
-    '@utils': './src/utils/'
+    '@utils': 'src/utils/'
   }
 });

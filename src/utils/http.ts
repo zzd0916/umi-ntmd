@@ -63,11 +63,9 @@ const http = extend({
 
 // request拦截器, 改变url 或 options.
 http.interceptors.request.use((url, options: RequestOptionsInit) => {
-  if (options.method === 'get') {
-    options.params = {
-      queryJson: JSON.stringify(options.params || options.data),
-    };
-  }
+  // if (options.method === 'get') {
+  //   options.params = JSON.stringify(options.params || options.data)
+  // }
   options.headers = Object.assign({}, options.headers, {"x-csrf-token":getCookie("csrfToken")})
   return {
     url,

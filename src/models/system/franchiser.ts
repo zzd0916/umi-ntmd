@@ -6,7 +6,7 @@ export interface ITabs {
     desc: string;
 }
 
-export interface DictionaryModelState {
+export interface FranchiserMode {
   mark: string;
   readonly tabs: Array<ITabs>;
   list: Array<object>;
@@ -15,23 +15,22 @@ export interface DictionaryModelState {
   count: number;
 }
 
-export interface DictionaryModelType {
-  namespace: 'dictionary';
-  state: DictionaryModelState;
+export interface FranchiserModelType {
+  namespace: 'dictionary.franchiser';
+  state: FranchiserMode;
   effects: {
     query: Effect;
   };
   reducers: {
-    setMark: ImmerReducer<DictionaryModelState>;
-    setList: ImmerReducer<DictionaryModelState>;
+    setList: ImmerReducer<FranchiserMode>;
   };
   subscriptions: { setup: Subscription };
 }
 
-const DictionaryModel: DictionaryModelType = {
-  namespace: 'dictionary',
+const FranchiserModel: FranchiserModelType = {
+  namespace: 'dictionary.franchiser',
   state: {
-    mark: '',
+    mark: 'memberSource',
     tabs: [
         {name: '会员来源', value: 'memberSource', 'desc':'检测用户来源'},
         {name: '合作商类型', value: 'franchiserType', 'desc':'授权合作商类型'},
@@ -50,10 +49,6 @@ const DictionaryModel: DictionaryModelType = {
   reducers: {
     setList(state, { payload: { data: list, count, p } }) {
         return { ...state, list, count};
-    },
-    setMark(state, { payload: {mark}}) {
-      console.log(mark, 'mark')
-      return {...state, mark}
     }
   },
   subscriptions: {
@@ -68,4 +63,4 @@ const DictionaryModel: DictionaryModelType = {
     }
   }
 };
-export default DictionaryModel;
+export default FranchiserModel;

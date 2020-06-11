@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { Component,useState } from 'react';
+import { DictionaryModelState, ConnectRC, Loading, connect } from 'umi';
 import { Tree } from 'antd';
 
 const { TreeNode } = Tree;

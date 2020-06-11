@@ -1,12 +1,12 @@
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
-
+import * as dictionaryService from '@/services/dictionary';
 export interface ITabs {
     name: string;
     value: string;
     desc: string;
 }
 
-export interface DictionaryModelState {
+export interface MemberModelState {
   mark: string;
   readonly tabs: Array<ITabs>;
   list: Array<object>;
@@ -15,23 +15,22 @@ export interface DictionaryModelState {
   count: number;
 }
 
-export interface DictionaryModelType {
-  namespace: 'dictionary';
-  state: DictionaryModelState;
+export interface MemberModelType {
+  namespace: 'dictionaryMember';
+  state: MemberModelState;
   effects: {
-    query: Effect;
+    getList: Effect;
   };
   reducers: {
-    setMark: ImmerReducer<DictionaryModelState>;
-    setList: ImmerReducer<DictionaryModelState>;
+    setList: ImmerReducer<MemberModelState>;
   };
   subscriptions: { setup: Subscription };
 }
 
-const DictionaryModel: DictionaryModelType = {
-  namespace: 'dictionary',
+const MemberModel: MemberModelType = {
+  namespace: 'dictionaryMember',
   state: {
-    mark: '',
+    mark: 'memberSource',
     tabs: [
         {name: '会员来源', value: 'memberSource', 'desc':'检测用户来源'},
         {name: '合作商类型', value: 'franchiserType', 'desc':'授权合作商类型'},
@@ -44,28 +43,35 @@ const DictionaryModel: DictionaryModelType = {
     count: 0
   },
   effects: {
-    *query({ payload }, { call, put }) {
-    },
+    *getList({ payload: { p = 1 , mark="memberSource" } }, { call, put }) {
+        console.log('effect getList')
+        const { list, count } = yield call(dictionaryService.getList, { p, mark });
+        console.log( list , count )
+        yield put({
+          type: 'setList',
+          payload: {
+            list,
+            count
+          },
+        });
+      },
   },
   reducers: {
-    setList(state, { payload: { data: list, count, p } }) {
+    setList(state, { payload: {list, count } }) {
         return { ...state, list, count};
-    },
-    setMark(state, { payload: {mark}}) {
-      console.log(mark, 'mark')
-      return {...state, mark}
     }
   },
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname }) => {
-        if (pathname === '/') {
+          console.log('pathname', pathname)
+        if (pathname === '/system/dictionary') {
           dispatch({
-            type: 'query',
+            type: 'getList',
           })
         }
       });
     }
   }
 };
-export default DictionaryModel;
+export default MemberModel;

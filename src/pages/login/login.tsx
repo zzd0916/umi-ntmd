@@ -1,20 +1,29 @@
 import React, { Component } from 'react'
 import logoSrc from '@/assets/images/logo-login.png'
-import { Form, Input, Button, Radio, message } from 'antd'
+import { Form, Input, Button, Radio, message, Modal } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { history } from 'umi'
 import { Store } from 'antd/es/form/interface';
 import http from '@/utils/http'
-import auth from '@/utils/auth'
+import { setLogin } from '@/utils/auth'
 
+import DictionaryAddModel from '@/components/DictionaryAddModel'
 import './login.less'
+import UserModel from '@/models/user'
 
 class Login extends Component {
 
   state = {
     formList: [
       {}
-    ]
+    ],
+    modalVisible: false
+  }
+
+  setModalSHow = () => {
+    this.setState({
+      modalVisible : true
+    })
   }
 
   onFinish = (values: Store) : void => {
@@ -25,7 +34,7 @@ class Login extends Component {
       }
     }).then( res => {
       if(res.data && res.data._id) {
-        auth.setLogin(res.data)
+        setLogin(res.data)
         message.success('log in success')
         history.push('/')
       }
@@ -33,6 +42,7 @@ class Login extends Component {
   };
 
   render() {
+    const { modalVisible } = this.state;
     return (
       <div className="login">
          <div className="login-lang">
@@ -44,6 +54,8 @@ class Login extends Component {
             </Radio.Group>
         </div>
         <div className="login-box">
+          <DictionaryAddModel visible={this.state.modalVisible} title="新增" />
+          <button onClick={this.setModalSHow.bind(this)}>设置</button>
           <img src={logoSrc} width="100%" alt="" />
           <Form
             name="normal_login"
@@ -77,6 +89,7 @@ class Login extends Component {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
+                autoComplete="off"
               />
             </Form.Item>
             {/* <Form.Item>

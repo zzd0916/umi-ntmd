@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Layout, Radio, Menu, Dropdown, message } from 'antd'
 import { Link, history } from 'umi'
+import { logOut } from '@/utils/auth'
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
@@ -15,6 +16,7 @@ interface IProps {
 
 class HeaderBar extends Component<IProps> {
     logout() {
+        logOut()
         history.push('/login');
         message.success('logout out success');
     }
